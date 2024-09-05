@@ -1,0 +1,1 @@
+C:\Paul docs\Projects\Ficma WMS\Android MAUI WMS\wms_android\wms_android.csproj;x64
