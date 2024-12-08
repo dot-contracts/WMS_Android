@@ -414,67 +414,30 @@ namespace wms_android.ViewModels
                 // First validate
                 if (ParcelsInWaybill == null || !ParcelsInWaybill.Any())
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "No parcels in the cart to save.", "OK");
-                    return;
-                }
-                if (_parcelService == null)
-                {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Parcel service is not initialized.", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Error", "No parcels in the cart to view.", "OK");
                     return;
                 }
 
-                // Generate waybill if needed
-                if (string.IsNullOrEmpty(WaybillNumber))
-                {
-                    WaybillNumber = await _parcelService.GenerateWaybillNumberAsync();
-                }
-
-                // Process parcels
-                //foreach (var parcel in ParcelsInWaybill)
-                //{
-                //    parcel.WaybillNumber = WaybillNumber;
-                //    if (parcel.DispatchedAt.HasValue && parcel.DispatchedAt.Value.Kind != DateTimeKind.Utc)
-                //    {
-                //        parcel.DispatchedAt = parcel.DispatchedAt.Value.ToUniversalTime();
-                //    }
-                //}
-
-                foreach (var parcel in ParcelsInWaybill)
-                {
-                    parcel.WaybillNumber = WaybillNumber;
-                    parcel.DispatchedAt = parcel.DispatchedAt?.ToUniversalTime();
-                }
-
-                // Log the state before save
-                Debug.WriteLine($"Saving {ParcelsInWaybill.Count} parcels with waybill: {WaybillNumber}");
-
-                // Save operations
-                await _parcelService.CreateCartParcels(ParcelsInWaybill.ToList());
-                Debug.WriteLine("CreateCartParcels completed successfully");
-                await _parcelService.FinalizeWaybillAsync();
-                Debug.WriteLine("FinalizeWaybillAsync completed successfully");
-
-                // Calculate total amount and set up ReceiptCartViewModel
+                // Calculate total amount and setup receipt view model
                 var totalAmount = ParcelsInWaybill.Sum(p => p.Amount);
-                var paymentMethod = PaymentMethods; // Adjust as needed for specific payment method
-                var receiptCartViewModel = new ReceiptCartViewModel(_parcelService, new ObservableCollection<Parcel>(ParcelsInWaybill), WaybillNumber, totalAmount, paymentMethod);
+                var paymentMethod = ParcelsInWaybill.FirstOrDefault()?.PaymentMethods ?? "Unknown";
+                
+                var receiptCartViewModel = new ReceiptCartViewModel(
+                    _parcelService,
+                    new ObservableCollection<Parcel>(ParcelsInWaybill),
+                    WaybillNumber,
+                    totalAmount,
+                    paymentMethod);
 
-
-                // Success message
-                await Application.Current.MainPage.DisplayAlert("Success", "All parcels in the waybill have been saved.", "OK");
-
-                // Cleanup
-                // Navigate to ReceiptCartView
-                var receiptCartView = new ReceiptCartView { BindingContext = receiptCartViewModel };
+                // Navigate to receipt view
+                var receiptCartView = new ReceiptCartView(receiptCartViewModel);
                 await Application.Current.MainPage.Navigation.PushModalAsync(receiptCartView);
-                CurrentWaybill = null;
-                ResetCart();
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to process cart: {ex.Message}", "OK");
+                Debug.WriteLine($"Error in OnCartDone: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to display receipt: {ex.Message}", "OK");
             }
-
         }
 
         private void OnPrintReceipt()

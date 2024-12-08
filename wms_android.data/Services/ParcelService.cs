@@ -28,18 +28,30 @@ namespace wms_android.data.Services
 
         public async Task CreateCartParcels(List<Parcel> parcels)
         {
+            if (parcels == null || !parcels.Any())
+                throw new ArgumentException("Parcels list cannot be null or empty");
+
             foreach (var parcel in parcels)
             {
-                // Set WaybillNumber for each parcel (assuming parcels already have WaybillNumber assigned)
+                if (string.IsNullOrEmpty(parcel.WaybillNumber))
+                    throw new ArgumentException($"WaybillNumber is required for parcel");
+
+                // Ensure required fields are set
                 parcel.QRCode = GenerateQRCode(parcel.WaybillNumber);
-                parcel.CreatedAt = DateTime.UtcNow; // Ensure UTC
+                parcel.CreatedAt = DateTime.UtcNow;
                 parcel.Status = ParcelStatus.Pending;
 
-                // Add each parcel to the context
+                // Validate required fields
+                if (string.IsNullOrEmpty(parcel.Sender) || 
+                    string.IsNullOrEmpty(parcel.Receiver) || 
+                    string.IsNullOrEmpty(parcel.Destination))
+                {
+                    throw new ArgumentException("Required fields (Sender, Receiver, Destination) must be set");
+                }
+
                 _context.Parcels.Add(parcel);
             }
 
-            // Save all parcels at once
             await _context.SaveChangesAsync();
         }
 
