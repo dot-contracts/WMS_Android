@@ -95,9 +95,15 @@ namespace wms_android.ViewModels
         private async Task ExecuteAddParcelCommand()
         {
             var parcelService = ServiceHelper.GetService<IParcelService>();
+            // var smsService = ServiceHelper.GetService<SmsService>(); // Retrieve SmsService
+
+            System.Diagnostics.Debug.WriteLine("ParcelService resolved successfully.");
+            System.Diagnostics.Debug.WriteLine("SmsService resolved successfully.");
             var parcelsViewModel = new ParcelsViewModel(parcelService);
+            // var parcelsViewModel = new ParcelsViewModel(parcelService, smsService); // Pass both services
             await Navigation.PushAsync(new ParcelsView(parcelsViewModel));
         }
+
 
         private async Task ExecuteHomeCommand()
         {

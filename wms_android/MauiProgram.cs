@@ -8,6 +8,8 @@ using wms_android.ViewModels;
 using wms_android.Views;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
+using wms_android.data.Models;
+using wms_android.Services;
 
 namespace wms_android
 {
@@ -72,8 +74,15 @@ namespace wms_android
             builder.Services.AddTransient<ParcelsView>();
 
             builder.Services.AddTransient<ClerkDashboardViewModel>();
-builder.Services.AddTransient<ClerkDashboardView>();
+            builder.Services.AddTransient<ClerkDashboardView>();
             
+            builder.Services.Configure<SmsConfiguration>(configuration.GetSection("SmsApi"));
+            builder.Services.AddSingleton<SmsService>();
+            
+            
+            System.Diagnostics.Debug.WriteLine($"Configuration Test: UserId = {configuration["SmsApi:UserId"]}");
+            System.Diagnostics.Debug.WriteLine($"Configuration Test: ApiUrl = {configuration["SmsApi:ApiUrl"]}");
+
             return builder.Build();
         }
     }

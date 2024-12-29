@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using wms_android.Views;
 using wms_android.data.Interfaces;
 using System.Diagnostics;
+using wms_android.Helpers;
+using wms_android.Services;
 
 namespace wms_android.ViewModels
 {
@@ -17,6 +19,7 @@ namespace wms_android.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IParcelService _parcelService; // Injected service
+        private readonly SmsService _smsService; // Injected service
         private string _waybillNumber;
         //public string WaybillNumber { get; set; } // Shared across parcels for a Waybill
         public string _sender { get; set; }
@@ -170,9 +173,11 @@ namespace wms_android.ViewModels
 
 
         // Default constructor for XAML instantiation
+        // public ParcelsViewModel(IParcelService parcelService, SmsService smsService)
         public ParcelsViewModel(IParcelService parcelService)
         {
             _parcelService = parcelService;
+            // _smsService = smsService;
 
             // Generate the waybill number using the service
             //_waybillNumber = _parcelService.GenerateWaybillNumber();
@@ -321,7 +326,19 @@ namespace wms_android.ViewModels
 
                 // Finalize the waybill
                 await _parcelService.FinalizeWaybillAsync();
-
+                
+                // Send SMS notification
+                var message = SmsTemplates.ParcelDispatched(
+                    CurrentParcel.WaybillNumber,
+                    Sender,
+                    SenderTelephone,
+                    CurrentParcel.Destination,
+                    CurrentParcel.TotalAmount,
+                    CurrentParcel.PaymentMethods
+                );
+                
+                var response = await _smsService.SendSmsAsync(CurrentParcel.ReceiverTelephone, message);
+                Debug.WriteLine($"SMS Response: {response}");
                 // Navigate to the receipt view
                 var receiptViewModel = new ReceiptViewModel(_parcelService) { Parcel = CurrentParcel };
                 var receiptView = new ReceiptView(receiptViewModel);

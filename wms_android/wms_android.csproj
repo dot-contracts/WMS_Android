@@ -1,13 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFrameworks>net8.0-android;</TargetFrameworks>
+	  <TargetFrameworks>net8.0-android</TargetFrameworks>
 	  <!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>-->
 	  <OutputType>Exe</OutputType>
     <RootNamespace>wms_android</RootNamespace>
     <UseMaui>true</UseMaui>
-	<EnableDefaultItems>true</EnableDefaultItems>
+	  <EnableDefaultItems>true</EnableDefaultItems>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
     <SingleProject>true</SingleProject>
+    <RuntimeIdentifier>android-x64</RuntimeIdentifier>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -91,6 +93,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AndroidPosSdk\AndroidPosSdk.csproj" />
+    <ProjectReference Include="..\VanstonePosSdk\VanstonePosSdk.csproj" />
     <ProjectReference Include="..\wms_android.data\wms_android.data.csproj" />
   </ItemGroup>
 
