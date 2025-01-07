@@ -51,7 +51,7 @@ namespace wms_android.ViewModels
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Please select both vehicle and driver.", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Error", "Please select both vehicle and driver.", "OK");
             }
         }
 

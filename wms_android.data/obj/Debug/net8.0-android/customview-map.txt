@@ -1,0 +1,4 @@
+cache-path;/home/temporary/Projects/WMS_Android/wms_android.data/obj/Debug/net8.0-android/lp/44/jl/res/xml/microsoft_maui_essentials_fileprovider_file_paths.xml
+external-cache-path;/home/temporary/Projects/WMS_Android/wms_android.data/obj/Debug/net8.0-android/lp/44/jl/res/xml/microsoft_maui_essentials_fileprovider_file_paths.xml
+external-path;/home/temporary/Projects/WMS_Android/wms_android.data/obj/Debug/net8.0-android/lp/44/jl/res/xml/microsoft_maui_essentials_fileprovider_file_paths.xml
+paths;/home/temporary/Projects/WMS_Android/wms_android.data/obj/Debug/net8.0-android/lp/44/jl/res/xml/microsoft_maui_essentials_fileprovider_file_paths.xml

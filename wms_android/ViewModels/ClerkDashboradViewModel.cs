@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using wms_android.data.Interfaces;
 using wms_android.data.Models;
+using wms_android.Interfaces;
 using wms_android.Services;
 using wms_android.Views;
 
@@ -62,7 +63,7 @@ namespace wms_android.ViewModels
         public ICommand HomeCommand { get; }
         public ICommand OrdersCommand { get; }
 
-        public ClerkDashboardViewModel(IParcelService parcelService, IUserService userService, INavigation navigation)
+        public ClerkDashboardViewModel(IParcelService parcelService, IUserService userService, IPrinterService printerService, INavigation navigation)
         {
             _parcelService = parcelService;
             _userService = userService;
@@ -70,7 +71,7 @@ namespace wms_android.ViewModels
             PendingOrders = new ObservableCollection<Parcel>();
             RefreshCommand = new Command(async () => await LoadDashboardData());
 
-            AddParcelCommand = new Command(async () => await ExecuteAddParcelCommand());
+            AddParcelCommand = new Command(async () => await ExecuteAddParcelCommand(printerService));
             HomeCommand = new Command(async () => await ExecuteHomeCommand());
             OrdersCommand = new Command(async () => await ExecuteOrdersCommand());
         }
@@ -92,14 +93,14 @@ namespace wms_android.ViewModels
             OnPropertyChanged(nameof(PendingOrders));
         }
 
-        private async Task ExecuteAddParcelCommand()
+        private async Task ExecuteAddParcelCommand(IPrinterService printerService)
         {
             var parcelService = ServiceHelper.GetService<IParcelService>();
             // var smsService = ServiceHelper.GetService<SmsService>(); // Retrieve SmsService
 
             System.Diagnostics.Debug.WriteLine("ParcelService resolved successfully.");
             System.Diagnostics.Debug.WriteLine("SmsService resolved successfully.");
-            var parcelsViewModel = new ParcelsViewModel(parcelService);
+            var parcelsViewModel = new ParcelsViewModel(parcelService, printerService);
             // var parcelsViewModel = new ParcelsViewModel(parcelService, smsService); // Pass both services
             await Navigation.PushAsync(new ParcelsView(parcelsViewModel));
         }
@@ -115,7 +116,7 @@ namespace wms_android.ViewModels
         {
             // Implement navigation to Orders page
             // For now, we'll just show an alert
-            await Application.Current.MainPage.DisplayAlert("Orders", "Orders page not implemented yet", "OK");
+            await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Orders", "Orders page not implemented yet", "OK");
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

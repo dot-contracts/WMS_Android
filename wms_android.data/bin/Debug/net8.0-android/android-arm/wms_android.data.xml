@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>wms_android.data</name>
+    </assembly>
+    <members>
+        <member name="T:wms_android.data.Migrations.AddVehiclesAndDrivers">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.AddVehiclesAndDrivers.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.AddVehiclesAndDrivers.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.AddVehiclesAndDrivers.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:wms_android.data.Migrations.SeedVehiclesAndDrivers">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.SeedVehiclesAndDrivers.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.SeedVehiclesAndDrivers.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.SeedVehiclesAndDrivers.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:wms_android.data.Migrations.SeedUsersAndRoles">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.SeedUsersAndRoles.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.SeedUsersAndRoles.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.SeedUsersAndRoles.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:wms_android.data.Migrations.AddCreatedAtToUsers">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.AddCreatedAtToUsers.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.AddCreatedAtToUsers.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.AddCreatedAtToUsers.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:wms_android.data.Migrations.UpdateUserSeedDataWithProperHash">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.UpdateUserSeedDataWithProperHash.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.UpdateUserSeedDataWithProperHash.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.UpdateUserSeedDataWithProperHash.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:wms_android.data.Migrations.UpdateUserSeedDataWithConsoleMessage">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.UpdateUserSeedDataWithConsoleMessage.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.UpdateUserSeedDataWithConsoleMessage.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.UpdateUserSeedDataWithConsoleMessage.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:wms_android.data.Migrations.UpdateParcelTimestamps">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.UpdateParcelTimestamps.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.UpdateParcelTimestamps.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.UpdateParcelTimestamps.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:wms_android.data.Migrations.FixDateTimeType">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.FixDateTimeType.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.FixDateTimeType.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.FixDateTimeType.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:wms_android.data.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:wms_android.data.Migrations.SmsConfigutrationsDetails">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.SmsConfigutrationsDetails.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.SmsConfigutrationsDetails.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:wms_android.data.Migrations.SmsConfigutrationsDetails.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

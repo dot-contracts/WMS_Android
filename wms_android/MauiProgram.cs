@@ -9,6 +9,7 @@ using wms_android.Views;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
 using wms_android.data.Models;
+using wms_android.Interfaces;
 using wms_android.Services;
 
 namespace wms_android
@@ -64,6 +65,11 @@ namespace wms_android
 
             // Register services and viewmodels
             builder.Services.AddTransient<IParcelService, ParcelService>();
+            
+            //Register Printer Service per device
+            builder.Services.AddSingleton<IPrinterService, VanstonePrinterService>();
+            // builder.Services.AddSingleton<IPrinterService, PosApiPrinterService>();
+            
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IVehicleService, VehicleService>();
             builder.Services.AddTransient<ParcelService>();

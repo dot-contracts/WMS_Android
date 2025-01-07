@@ -11,7 +11,7 @@ namespace wms_android.Services
         public static T GetService<T>() => Current.GetService<T>();
 
         public static IServiceProvider Current =>
-            (IServiceProvider)Application.Current.Handler.MauiContext.Services;
+            (IServiceProvider)Microsoft.Maui.Controls.Application.Current.Handler.MauiContext.Services;
     }
 
 }

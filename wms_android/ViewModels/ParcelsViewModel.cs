@@ -11,6 +11,7 @@ using wms_android.Views;
 using wms_android.data.Interfaces;
 using System.Diagnostics;
 using wms_android.Helpers;
+using wms_android.Interfaces;
 using wms_android.Services;
 
 namespace wms_android.ViewModels
@@ -174,7 +175,7 @@ namespace wms_android.ViewModels
 
         // Default constructor for XAML instantiation
         // public ParcelsViewModel(IParcelService parcelService, SmsService smsService)
-        public ParcelsViewModel(IParcelService parcelService)
+        public ParcelsViewModel(IParcelService parcelService, IPrinterService printerService)
         {
             _parcelService = parcelService;
             // _smsService = smsService;
@@ -197,12 +198,12 @@ namespace wms_android.ViewModels
             {
                 if (await ValidateParcelAsync())
                 {
-                    await OnDone();
+                    await OnDone(printerService);
                 }
             });
             CartCommand = new Command(() => OnCartDone());  // Explicitly calling the method in a lambda
             AddParcelCommand = new Command(OnAddParcel);
-            PrintReceiptCommand = new Command(OnPrintReceipt);
+            PrintReceiptCommand = new Command(() => OnPrintReceipt(printerService));
             ValidateParcelCommand = new Command(async () => await ValidateParcelAsync());
             BackCommand = new Command(async () => await BackToParcels());
             DeleteParcelCommand = new RelayCommand<Parcel>(OnDeleteParcel);
@@ -241,20 +242,20 @@ namespace wms_android.ViewModels
                 string.IsNullOrWhiteSpace(CurrentParcel.Amount.ToString()) ||
                 string.IsNullOrWhiteSpace(CurrentParcel.Quantity.ToString()))
             {
-                await Application.Current.MainPage.DisplayAlert("Validation Error", "Please fill in all required fields.", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Validation Error", "Please fill in all required fields.", "OK");
                 return false;
             }
 
             // Validate the sender's and receiver's phone numbers
             if (!IsValidPhoneNumber(CurrentParcel.SenderTelephone))
             {
-                await Application.Current.MainPage.DisplayAlert("Validation Error", "Sender's phone number is invalid.", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Validation Error", "Sender's phone number is invalid.", "OK");
                 return false;
             }
 
             if (!IsValidPhoneNumber(CurrentParcel.ReceiverTelephone))
             {
-                await Application.Current.MainPage.DisplayAlert("Validation Error", "Receiver's phone number is invalid.", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Validation Error", "Receiver's phone number is invalid.", "OK");
                 return false;
             }
 
@@ -284,17 +285,25 @@ namespace wms_android.ViewModels
 
 
 
-        private async Task OnDone()
+        private async Task OnDone(IPrinterService printerService)
         {
             if (CurrentParcel == null)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "No parcel data to save", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Error", "No parcel data to save.", "OK");
                 return;
             }
 
             if (_parcelService == null)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Parcel service is not initialized.", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Error", "Parcel service is not initialized.", "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(CurrentParcel.Sender) ||
+                string.IsNullOrWhiteSpace(CurrentParcel.Receiver) ||
+                string.IsNullOrWhiteSpace(CurrentParcel.PaymentMethods))
+            {
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Validation Error", "Parcel details are incomplete.", "OK");
                 return;
             }
 
@@ -318,7 +327,7 @@ namespace wms_android.ViewModels
 
                 if (CurrentParcel.CreatedAt.Kind != DateTimeKind.Utc)
                 {
-                    CurrentParcel.CreatedAt = CurrentParcel.CreatedAt.ToUniversalTime();
+                    CurrentParcel.CreatedAt = DateTime.UtcNow;
                 }
 
                 // Save the parcel to the database
@@ -326,23 +335,27 @@ namespace wms_android.ViewModels
 
                 // Finalize the waybill
                 await _parcelService.FinalizeWaybillAsync();
-                
+
                 // Send SMS notification
-                var message = SmsTemplates.ParcelDispatched(
-                    CurrentParcel.WaybillNumber,
-                    Sender,
-                    SenderTelephone,
-                    CurrentParcel.Destination,
-                    CurrentParcel.TotalAmount,
-                    CurrentParcel.PaymentMethods
-                );
-                
-                var response = await _smsService.SendSmsAsync(CurrentParcel.ReceiverTelephone, message);
-                Debug.WriteLine($"SMS Response: {response}");
+                if (_smsService != null)
+                {
+                    var message = SmsTemplates.ParcelDispatched(
+                        CurrentParcel.WaybillNumber,
+                        Sender,
+                        SenderTelephone,
+                        CurrentParcel.Destination,
+                        CurrentParcel.TotalAmount,
+                        CurrentParcel.PaymentMethods
+                    );
+
+                    var response = await _smsService.SendSmsAsync(CurrentParcel.ReceiverTelephone, message);
+                    Debug.WriteLine($"SMS Response: {response}");
+                }
+
                 // Navigate to the receipt view
-                var receiptViewModel = new ReceiptViewModel(_parcelService) { Parcel = CurrentParcel };
+                var receiptViewModel = new ReceiptViewModel(_parcelService, printerService) { Parcel = CurrentParcel };
                 var receiptView = new ReceiptView(receiptViewModel);
-                await Application.Current.MainPage.Navigation.PushModalAsync(receiptView);
+                await Microsoft.Maui.Controls.Application.Current.MainPage.Navigation.PushModalAsync(receiptView);
 
                 // Reset the form after saving
                 ResetParcel();
@@ -350,13 +363,14 @@ namespace wms_android.ViewModels
             catch (DbUpdateException dbEx)
             {
                 var innerException = dbEx.InnerException != null ? dbEx.InnerException.Message : "No inner exception";
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to save parcel: {dbEx.Message}\nInner Exception: {innerException}", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Error", $"Failed to save parcel: {dbEx.Message}\nInner Exception: {innerException}", "OK");
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to save parcel: {ex.Message}", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Error", $"Failed to save parcel: {ex.Message}", "OK");
             }
         }
+
 
 
         public async Task AddParcelToCart(Parcel newParcel)
@@ -399,7 +413,7 @@ namespace wms_android.ViewModels
             OnPropertyChanged(nameof(TotalAmount));
 
             // Optionally show confirmation message
-            await Application.Current.MainPage.DisplayAlert("Success", "Parcel added to the current waybill.", "OK");
+            await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Success", "Parcel added to the current waybill.", "OK");
         }
         private async void OnEditParcel(Parcel parcel)
         {
@@ -409,7 +423,7 @@ namespace wms_android.ViewModels
                 CurrentParcel = parcel;
 
                 // Optionally navigate back to the Add Parcel form for editing
-                await Application.Current.MainPage.Navigation.PopAsync(); // Assuming this navigates back to the Add Parcel page
+                await Microsoft.Maui.Controls.Application.Current.MainPage.Navigation.PopAsync(); // Assuming this navigates back to the Add Parcel page
 
                 // Notify the UI to update the form fields with the selected parcel's data
                 OnPropertyChanged(nameof(CurrentParcel));
@@ -431,7 +445,7 @@ namespace wms_android.ViewModels
                 // First validate
                 if (ParcelsInWaybill == null || !ParcelsInWaybill.Any())
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "No parcels in the cart to view.", "OK");
+                    await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Error", "No parcels in the cart to view.", "OK");
                     return;
                 }
 
@@ -448,16 +462,16 @@ namespace wms_android.ViewModels
 
                 // Navigate to receipt view
                 var receiptCartView = new ReceiptCartView(receiptCartViewModel);
-                await Application.Current.MainPage.Navigation.PushModalAsync(receiptCartView);
+                await Microsoft.Maui.Controls.Application.Current.MainPage.Navigation.PushModalAsync(receiptCartView);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error in OnCartDone: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to display receipt: {ex.Message}", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Error", $"Failed to display receipt: {ex.Message}", "OK");
             }
         }
 
-        private void OnPrintReceipt()
+        private void OnPrintReceipt(IPrinterService printerService)
         {
             try
             {
@@ -469,12 +483,12 @@ namespace wms_android.ViewModels
                 // Implement SDK printing logic here
 
                 // Simulate successful printing and show alert
-                Application.Current.MainPage.DisplayAlert("Success", "Receipt printed successfully.", "OK");
+                Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Success", "Receipt printed successfully.", "OK");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Print error: {ex.Message}");
-                Application.Current.MainPage.DisplayAlert("Error", "Failed to print receipt.", "OK");
+                Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Error", "Failed to print receipt.", "OK");
             }
         }
 
@@ -533,7 +547,7 @@ namespace wms_android.ViewModels
         private async void OnViewParcels()
         {
             var viewParcelsPage = new ListParcelsView(this); // Pass the current ViewModel
-            await Application.Current.MainPage.Navigation.PushAsync(viewParcelsPage);
+            await Microsoft.Maui.Controls.Application.Current.MainPage.Navigation.PushAsync(viewParcelsPage);
         }
 
         private async Task BackToParcels()
@@ -545,7 +559,7 @@ namespace wms_android.ViewModels
             ResetParcel(true);
 
             // Navigate back to the previous page (ParcelView)
-            await Application.Current.MainPage.Navigation.PopAsync();
+            await Microsoft.Maui.Controls.Application.Current.MainPage.Navigation.PopAsync();
         }
 
 
@@ -563,11 +577,11 @@ namespace wms_android.ViewModels
                 // Update the total amount for all parcels in this waybill
                 UpdateCartTotalAmount();
 
-                await Application.Current.MainPage.DisplayAlert("Success", "Parcel added to the cart.", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Success", "Parcel added to the cart.", "OK");
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Please fill in all required fields.", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Error", "Please fill in all required fields.", "OK");
             }
         }
 

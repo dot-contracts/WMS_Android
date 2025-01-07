@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Android",
+            "type": "dotnet",
+            "request": "launch",
+            "preLaunchTask": "build-android",
+            "program": "${workspaceFolder}/wms_android/bin/Debug/net8.0-android/com.companyname.wms_android.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole"
+        }
+    ]
+}

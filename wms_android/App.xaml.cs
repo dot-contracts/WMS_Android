@@ -3,10 +3,13 @@ using wms_android.Views;
 using wms_android.ViewModels;
 using wms_android.data.Interfaces;
 using Java.Util;
+using AndroidApplication = Android.App.Application;
+using MauiApplication = Microsoft.Maui.Controls.Application;
+
 
 namespace wms_android
 {
-    public partial class App : Application
+    public partial class App : MauiApplication
     {
         public App(IServiceProvider serviceProvider)
         {

@@ -1,0 +1,20 @@
+﻿<metadata>
+  <!-- Ensure PrinterApi is included -->
+  <add-node path="/api/package[@name='com.vanstone.trans.api']/class[@name='PrinterApi']" />
+
+  <!-- Rename PrinterApi methods (if needed) -->
+  <attr path="/api/package[@name='com.vanstone.trans.api']/class[@name='PrinterApi']/method[@name='printInit']" name="managedName">PrintInit</attr>
+  <attr path="/api/package[@name='com.vanstone.trans.api']/class[@name='PrinterApi']/method[@name='printText']" name="managedName">PrintText</attr>
+  <attr path="/api/package[@name='com.vanstone.trans.api']/class[@name='PrinterApi']/method[@name='printEnd']" name="managedName">PrintEnd</attr>
+
+  <!-- Ensure KeyBoard and KeyBoardCCB are included -->
+  <add-node path="/api/package[@name='com.vanstone.page.widget.body.custom']/class[@name='KeyBoard']" />
+  <add-node path="/api/package[@name='com.vanstone.page.widget.body.custom']/class[@name='KeyBoardCCB']" />
+
+  <!-- Map IKeyBoard methods -->
+  <attr path="/api/package[@name='com.vanstone.page.widget.body.custom']/interface[@name='IKeyBoard']/method[@name='setAmount']" name="visibility">public</attr>
+  <attr path="/api/package[@name='com.vanstone.page.widget.body.custom']/interface[@name='IKeyBoard']/method[@name='setDispAmount']" name="visibility">public</attr>
+  <attr path="/api/package[@name='com.vanstone.page.widget.body.custom']/interface[@name='IKeyBoard']/method[@name='setDispMsg']" name="visibility">public</attr>
+  <attr path="/api/package[@name='com.vanstone.page.widget.body.custom']/interface[@name='IKeyBoard']/method[@name='setDispPwdBox']" name="visibility">public</attr>
+  <attr path="/api/package[@name='com.vanstone.page.widget.body.custom']/interface[@name='IKeyBoard']/method[@name='setKeyLen']" name="visibility">public</attr>
+</metadata>

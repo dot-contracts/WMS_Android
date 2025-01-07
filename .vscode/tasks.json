@@ -1,0 +1,49 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-android",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "-f",
+                "net8.0-android",
+                "-c",
+                "Debug",
+                "/p:AndroidPackageFormat=apk",
+                "${workspaceFolder}/wms_android/wms_android.csproj"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "clean",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "clean",
+                "${workspaceFolder}/wms_android/wms_android.sln"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish-android",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "-f",
+                "net8.0-android",
+                "-c",
+                "Release",
+                "/p:AndroidPackageFormat=apk",
+                "${workspaceFolder}/wms_android/wms_android.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

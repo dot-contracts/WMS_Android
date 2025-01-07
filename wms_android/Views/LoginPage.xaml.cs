@@ -1,5 +1,6 @@
 using wms_android.data.Data;
 using wms_android.data.Interfaces;
+using wms_android.Interfaces;
 using wms_android.Services;
 using wms_android.ViewModels;
 
@@ -19,12 +20,13 @@ public partial class LoginPage : ContentPage
     {
         InitializeComponent();
 
-        // Retrieve AppDbContext and UserService from DI container
-        var dbContext = ServiceHelper.GetService<AppDbContext>();
+        // Retrieve services from the DI container
         var userService = ServiceHelper.GetService<IUserService>();
+        var printerService = ServiceHelper.GetService<IPrinterService>();
 
         // Set the BindingContext using the resolved services
-        BindingContext = new LoginViewModel(userService, this.Navigation);
+        BindingContext = new LoginViewModel(userService, printerService, this.Navigation);
     }
 }
+
 

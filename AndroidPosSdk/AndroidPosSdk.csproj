@@ -1,12 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- <TargetFramework>net8.0</TargetFramework> -->
     <TargetFramework>net8.0-android</TargetFramework>
-    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
-    <Nullable>enable</Nullable>
+    <!-- <RuntimeIdentifier>android-arm</RuntimeIdentifier> -->
+    <SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
+    <OutputType>Library</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <AndroidApplication>false</AndroidApplication>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="com\ciontek\ciontekposservice\ICiontekPosService.java" />
-  </ItemGroup>
+
+  <Target Name="Run">
+    <Warning Text="This project type can't be started directly." />
+  </Target>
+
 </Project>

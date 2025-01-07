@@ -7,6 +7,9 @@
 	<uses-permission android:name="android.permission.BROADCAST_STICKY" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.CLOUDPOS_PRINTER" />
+	
+
 
 	<!-- Place the receiver inside the application tag -->
 	<application
@@ -14,6 +17,7 @@
         android:icon="@mipmap/appicon"
         android:supportsRtl="true"
         android:label="Ficma">
+		<service android:name="com.vanstone.appsdk.api.printer.PrinterHandlerService" />
 
 		<!-- Declare the broadcast receiver inside the application -->
 		<receiver android:name=".ScanResultReceiver" android:exported="true">

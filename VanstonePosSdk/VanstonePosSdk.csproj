@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0-android</TargetFramework>
+        <SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <UseMaui>false</UseMaui>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <!-- <RuntimeIdentifier>android-arm</RuntimeIdentifier> -->
+        <!-- <OutputPath>bin\Debug\net8.0-android\android-arm</OutputPath> -->
+        <IntermediateOutputPath>obj\Debug\net8.0-android\android-arm</IntermediateOutputPath>
+        <OutputType>Library</OutputType>
+        <IsPackable>false</IsPackable>
+        <AndroidApplication>false</AndroidApplication>
+    </PropertyGroup>
+
+    <Target Name="Run">
+        <Warning Text="This project type can't be started directly." />
+    </Target>
+
+    <ItemGroup>
+        <EmbeddedJar Include="jars\AppSdkAidl_buildBy_20231222.jar" />
+        <EmbeddedJar Include="jars\vanstoneSdkClient-noemv_20231222.jar" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AndroidNativeLibrary Include="libs/armeabi-v7a/libA90JavahCore.so">
+            <Abi>armeabi-v7a</Abi>
+        </AndroidNativeLibrary>
+    </ItemGroup>
+</Project>

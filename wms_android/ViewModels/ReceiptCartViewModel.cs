@@ -108,15 +108,15 @@ namespace wms_android.ViewModels
                 _posApiHelper.PrintFeedPaper(150);
                 _posApiHelper.PrintStart();
 
-                await Application.Current.MainPage.DisplayAlert("Success", "Cart receipt printed successfully.", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Success", "Cart receipt printed successfully.", "OK");
 
                 // Navigate back to the root view
-                await Application.Current.MainPage.Navigation.PopToRootAsync();
+                await Microsoft.Maui.Controls.Application.Current.MainPage.Navigation.PopToRootAsync();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Cart Printing Error: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to print cart receipt: {ex.Message}", "OK");
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Error", $"Failed to print cart receipt: {ex.Message}", "OK");
             }
         }
 

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using wms_android.data.Models;
 using wms_android.data.Interfaces;
 using wms_android.data.Services;
+using wms_android.Interfaces;
 using wms_android.Views;
 using wms_android.Services;
 
@@ -17,6 +18,7 @@ namespace wms_android.ViewModels
     {
         private readonly IUserService _userService;
         private INavigation _navigation;
+        private readonly IPrinterService _printerService;
         private string _username;
         private string _password;
         private string _errorMessage;
@@ -51,9 +53,10 @@ namespace wms_android.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public LoginViewModel(IUserService userService, INavigation navigation)
-        {
-                _userService = userService;
+        public LoginViewModel(IUserService userService, IPrinterService printerService,  INavigation navigation)
+        { 
+            _userService = userService;
+            _printerService = printerService;
             _navigation = navigation;
             LoginCommand = new Command(async () => await OnLoginAsync());
         }
@@ -110,7 +113,7 @@ namespace wms_android.ViewModels
                 // Navigate to ClerkDashboardView
                 var parcelService = ServiceHelper.GetService<IParcelService>();
                 var userService = ServiceHelper.GetService<IUserService>();
-                var clerkDashboardViewModel = new ClerkDashboardViewModel(parcelService, userService, _navigation);
+                var clerkDashboardViewModel = new ClerkDashboardViewModel(parcelService, userService, _printerService, _navigation);
                 await _navigation.PushAsync(new ClerkDashboardView(clerkDashboardViewModel));
             }
             else
